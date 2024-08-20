@@ -75,6 +75,31 @@ function importeTotal(factura){
 Calorías
 Definir la función calorias(platoDeFideos), donde el plato puede o no tener los atributos caloriasBase (default 200), tieneSalsa y tieneQueso (default de estos dos, false). La salsa agrega 20 calorías, el queso 30.
 */
+let testCalorias = [
+  {
+    caloriasBase: 200,
+    tieneSalsa: false,
+    tieneQueso: false},
+  {
+    caloriasBase: 500,
+    tieneSalsa: false,
+    tieneQueso: true},
+  {
+    caloriasBase: 200
+  }
+]
+
+function calorias(platoDeFideos){
+  let caloriasBase = platoDeFideos.caloriasBase || 0
+  let tieneSalsa = platoDeFideos.tieneSalsa ? 20 : 0
+  let tieneQueso = platoDeFideos.tieneQueso ? 30 : 0
+  
+  return caloriasBase + tieneQueso + tieneSalsa
+}
+
+// console.log(calorias(testCalorias[0])) // -> 200
+// console.log(calorias(testCalorias[1])) // -> 530
+// console.log(calorias(testCalorias[2])) // -> 200
 
 /*
 Nombre completo
