@@ -105,3 +105,34 @@ function calorias(platoDeFideos){
 Nombre completo
 Definir la función fullName(person) donde person puede, o no, tener los atributos name y surname. Si tiene los dos, hay que separarlos con un espacio.
 */
+
+let testFullName = [
+  {
+    name: "angel",
+    surname: "mono"
+  },
+  {
+    name: "",
+    surname: undefined,
+  },
+  {
+    name: undefined,
+    surname: undefined
+  },
+  {
+    name: undefined,
+    surname: "mono"
+  }
+]
+
+function fullName(person){
+  let name = person.name || "sinNombre"
+  let surname = person.surname ? " " + person.surname : ""
+  
+  return name + surname
+}
+
+console.log(fullName(testFullName[0]))
+console.log(fullName(testFullName[1]))
+console.log(fullName(testFullName[2]))
+console.log(fullName(testFullName[3]))
