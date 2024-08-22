@@ -18,15 +18,20 @@ let testArea = [
   }
 ]
 
-function area(spec){
-  let areaSpec = spec.height * spec.width
-  return areaSpec || 0
-  // let isDefined = !!(spec.height && spec.width)
-  // return isDefined ? `area: ${spec.height * spec.width}` : 0 // estoy usando expreciones ternarias... no deberia usarla
-}
-
+// function area(spec){
+//   let areaSpec = spec.height * spec.width
+//   return areaSpec || 0
+//   // let isDefined = !!(spec.height && spec.width)
+//   // return isDefined ? `area: ${spec.height * spec.width}` : 0 // estoy usando expreciones ternarias... no deberia usarla
+// }
 // console.log("test 1",area(testArea[0]))
 // console.log("test 2", area(testArea[1]))
+
+// arrowfunction
+let area = (spec)=> spec.height * spec.width || 0
+
+console.log(area(testArea[0]));
+console.log(area(testArea[1]));
 
 /*
 Importe total de factura
