@@ -1,0 +1,148 @@
+const negro = {
+    nombre:"negro",
+    cambiar() { return negro;}
+}
+
+const verde = {
+    nombre:"verde",
+    cambiar() { return negro;}
+}
+
+const azul = {
+    nombre:"azul",
+    cambiar() { return verde;}
+}
+
+const rojo = {
+    nombre:"rojo",
+    cambiar() { return azul;}
+}
+
+
+const toretto = {
+    almacen:[],
+    agregarAuto(unAuto) {
+        this.almacen.push(unAuto);
+    },
+    quitarAuto(unAuto) {
+        const idx = this.almacen.findIndex(auto=>auto==unAuto);
+        if(idx > 0)
+            this.almacen.splice(idx, 1);
+    },
+    ponerEnCondiciones() {
+        return this.almacen.filter(
+            auto=> ! auto.estaEnCondiciones()
+        ).forEach (
+            auto=> auto.ponerEnCondiciones()
+        )
+    },
+    autoMasRapido() {
+        return this.almacen.reduce(
+            (a1, a2)=>{ a1.velocidad() > a2.velocidad() ? a1 : a2}
+        );
+    },
+    promedioVelocidades() {
+        const velociadades = this.almacen.reduce(
+            (acum, auto) => acum + auto.velocidad()
+        , 0);
+        return velociadades / this.almacen.length 
+    },
+    acelerar() {
+        this.almacen.forEach(
+            auto=>auto.acelerar()
+        )
+    },
+    estanTodosEnCondiciones() {
+        return this.almacen.every( 
+            auto => auto.estaEnCondiciones()
+        )
+    },
+    vender() {
+        this.almacen= [];
+    },
+    colores() {
+        return [...new Set(this.almacen.map(
+            auto => auto.color().nombre
+        ))]
+    }
+}
+
+
+const clasico = {
+    colorActual: rojo,
+    estadoMotor: 87,
+    estaEnCondiciones() {
+        return this.estadoMotor > 65;
+    },
+    reparar() {
+        this.estadoMotor= 87;
+    },
+    velocidad() {
+        let extra = 0;
+        if (this.estadoMotor>=50 && this.estadoMotor<= 75)
+            extra = 15;
+        return 110 + extra;
+    },
+    acelerar() {
+        this.estadoMotor = this.estadoMotor * 0.70;
+    },
+    color(){
+        return this.colorActual;
+    },
+    ponerEnCondiciones() {
+        this.reparar();
+        this.colorActual = this.colorActual.cambiar();
+    }
+}
+
+
+const carrera = {
+    colorActual: verde,
+    gasolina: 100,
+    nitro: false,
+    estaEnCondiciones() {
+        return this.gasolina > 85 && this.nitro;
+    },
+    velocidad() {
+        let extra = 0;
+        if (this.nitro)
+            extra = 85;
+        return 200 + extra;
+    },
+    acelerar() {
+        if (this.gasolina % 2 == 0)
+            this.gasolina =  Math.max(0, this.gasolina - 15)
+        else
+            this.galolina = Math.max(0, this.gasolina - 10)
+    },
+    color(){
+        return this.colorActual;
+    },
+    ponerEnCondiciones() {
+        this.gasolina = 100,
+        this.nitro =  true,
+        this.colorActual = this.colorActual.cambiar()
+    }
+}
+
+const coleccion = {
+    condicones : true,
+    estaEnCondiciones() { return this.condicones},
+    acelerar() { this.condicones = false},
+    velocidad() { return 45},
+    color() { return rojo},
+    ponerEnCondiciones() {this.condicones = true},
+
+}
+
+//Agrego al Almacen un una clasico
+toretto.agregarAuto(clasico)
+toretto.agregarAuto(carrera)
+toretto.agregarAuto(coleccion)
+toretto.acelerar()
+toretto.ponerEnCondiciones()
+console.log(toretto.colores())
+console.log(toretto.promedioVelocidades())
+console.log(toretto.estanTodosEnCondiciones())
+
+console.log(toretto.estanTodosEnCondiciones())

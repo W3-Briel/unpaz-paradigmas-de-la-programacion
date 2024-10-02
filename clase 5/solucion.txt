@@ -1,0 +1,254 @@
+const bombon = {
+    pesoActual : 15,
+    precio() {
+      return 5
+    },
+    sabor() {
+      return "frutilla"
+    },
+    peso() {
+      return this.pesoActual
+    },
+    esLibreDeGluten() {
+      return true
+    },
+    recibirMordisco() {
+      this.pesoActual = Math.max(0,this.pesoActual * 0.8 -1)
+    }
+  }
+  
+  const alfajor = {
+    pesoActual : 300,
+    precio() {
+      return 12
+    },
+    sabor() {
+      return "chocolate"
+    },
+    peso() {
+      return this.pesoActual
+    },
+    esLibreDeGluten() {
+      return false
+    },
+    recibirMordisco() {
+      this.pesoActual = this.pesoActual * 0.8 
+    }
+  }
+  
+  const caramelo = {
+    pesoActual : 5,
+    precio() {
+      return 1
+    },
+    sabor() {
+      return "frutilla"
+    },
+    peso() {
+      return this.pesoActual
+    },
+    esLibreDeGluten() {
+      return true
+    },
+    recibirMordisco() {
+      this.pesoActual = Math.max(0, this.pesoActual -1 )
+    } 
+  }
+  
+  const chupetin = {
+    pesoActual : 7,
+    precio() {
+      return 2
+    },
+    sabor() {
+      return "naranja"
+    },
+    peso() {
+      return this.pesoActual
+    },
+    esLibreDeGluten() {
+      return true
+    },
+    recibirMordisco() {
+      if (this.pesoActual >= 2)
+        this.pesoActual = this.pesoActual * 0.9
+    }  
+  }
+  
+  const oblea = {
+    pesoActual : 250,
+    precio() {
+      return 5
+    },
+    sabor() {
+      return "vainilla"
+    },
+    peso() {
+      return this.pesoActual
+    },
+    esLibreDeGluten() {
+      return false
+    },
+    recibirMordisco() {
+      if (this.pesoActual > 70)
+        this.pesoActual = this.pesoActual * 0.5
+      else
+        this.pesoActual = this.pesoActual * 0.75
+    }
+  }
+  
+  const chocolatin = {
+    pesoInicial : 10,
+    pesoActual : 10,
+    precio() {
+      return this.pesoInicial * 0.5
+    },
+    sabor() {
+      return "chocolate"
+    },
+    peso() {
+      return this.pesoActual
+    },
+    esLibreDeGluten() {
+      return false
+    },
+    recibirMordisco() {
+        this.pesoActual = Math.max(0, this.pesoActual - 2) 
+    }
+  }
+  
+  const baniada = {
+    golosina: undefined,
+    banio: 4,
+    precio() {
+      return this.golosina.precio() + 2
+    },
+    sabor() {
+      return this.golosina.sabor()
+    },
+    peso() {
+      this.banio = Math.max(0, this.banio - 2)
+      return this.golosina.peso() + this.banio
+    },
+    esLibreDeGluten() {
+      return this.golosina.esLibreDeGluten()
+    },
+    recibirMordisco() {
+      this.golosina.recibirMordisco()
+    }
+  }
+  
+  
+  const tuttifrutti = {
+    pesoActual : 5,
+    esLibreGluten: false,
+    mordisco:0,
+    sabores: ["frutilla","chocolate", "naranja"],
+    precio() {
+      if (this.esLibreGluten) 
+        return 7
+      else
+        return 10
+    },
+    sabor() {
+      return this.sabores[mordisco % sabores.length]
+    },
+    peso() {
+      return this.pesoActual
+    },
+    esLibreDeGluten() {
+      return this.esLibreGluten
+    },
+    recibirMordisco() {
+      this.mordisco += 1
+    }  
+  }
+  
+  const mariano = {
+    golosinas:[],
+    comprar(unaGolosina){
+      this.golosinas.push(unaGolosina)
+    },
+    desechar(unaGolosina) {
+        const indice = this.golosinas.findIndex( g=> g==unaGolosina)
+        if (indice >= 0)
+            this.golosinas.splice(indice,1)
+    },
+    cantidadDeGolosinas(){
+      return this.golosinas.length
+    },
+    tieneLaGolosina(unaGolosina){
+      return this.golosinas.includes(unaGolosina)
+    },
+    probarGolosinas(){
+      this.golosinas.forEach( g => g.recibirMordisco() )
+    },
+    hayGolosinaSinTACC() {
+      return this.golosinas.some( g=> g.esLibreDeGluten())
+    },
+    preciosCuidados() {
+      return this.golosinas.every( g=> g.precio()<= 10)
+    },
+    golosinaDeSabor(unSabor) {
+      return this.golosinas.find( g=> g.sabor() == unSabor)
+    },
+    golosinasDeSabor(unSabor) {
+      return this.golosinas.filter( g=> g.sabor() == unSabor)
+    },
+    sabores() {
+      return [...new Set(this.golosinas.map( g=> g.sabor()))]
+    },
+    pesoGolosinas() {
+      return this.golosinas.reduce( (acum,golo) => acum + golo.peso(), 0 )
+    },
+    golosinaMasCara() {
+      return this.golosinas.reduce( (golo1,golo2) => golo1.precio()>= golo2.precio() ? golo1: golo2)
+    }, 
+ 
+  }
+  
+  mariano.comprar(chupetin)
+  mariano.comprar(chocolatin)
+  mariano.comprar(alfajor)
+  mariano.comprar(bombon)
+  mariano.desechar(alfajor)
+  mariano.desechar(bombon)
+  console.log(mariano.cantidadDeGolosinas())
+  console.log(mariano.hayGolosinaSinTACC())
+  console.log(mariano.preciosCuidados())
+  console.log(mariano.sabores())
+  console.log(mariano.pesoGolosinas())
+  console.log(mariano.golosinaMasCara())
+  console.log(mariano.golosinaMasCara().precio())
+  
+  console.log(mariano.tieneLaGolosina(alfajor))
+  console.log(mariano.tieneLaGolosina(chupetin))
+  mariano.probarGolosinas()
+  console.log(chocolatin.peso())
+  console.log(alfajor.peso())
+  
+  
+  baniada.golosina = chocolatin
+  
+  console.log(baniada.peso())
+  baniada.recibirMordisco()
+  baniada.recibirMordisco()
+  console.log(baniada.peso())
+  
+
+  baniada.recibirMordisco()
+  console.log(baniada.peso())
+  
+
+  baniada.recibirMordisco()
+  console.log(baniada.peso())
+  
+  console.log(chocolatin.peso())
+  console.log(chocolatin.precio())
+  chocolatin.recibirMordisco()
+  console.log(chocolatin.peso())
+  console.log(chocolatin.precio())
+  chocolatin.recibirMordisco()
+  console.log(chocolatin.peso())
+  console.log(chocolatin.precio())
+  

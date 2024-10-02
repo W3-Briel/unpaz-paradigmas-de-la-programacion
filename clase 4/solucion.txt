@@ -1,0 +1,134 @@
+const heladera = {
+    precio(){return 200000},
+    esComida(){return false},
+    esElectro(){return true}
+}
+
+const cama = {
+    precio(){return 80000},
+    esComida(){return false},
+    esElectro(){return false}
+}
+
+const asado = {
+    precio(){return 3500},
+    esComida(){return true},
+    esElectro(){return false}
+}
+
+const fideos = {
+    precio(){return 500},
+    esComida(){return true},
+    esElectro(){return false}
+}
+
+const plancha = {
+    precio(){return 12000},
+    esComida(){return false},
+    esElectro(){return true}
+}
+
+const casa = {
+    cosas:[],
+    comprar(unaCosa){
+        this.cosas.push(unaCosa)
+    },
+    cantidadDeCosasCompradas(){
+        return this.cosas.length
+    },
+    tieneComida(){
+        return this.cosas.some(cosa=>cosa.esComida())
+    },
+    vieneDeEquiparse(){
+        const ultCosa = this.cosas[this.cosas.length - 1]
+        return ultCosa.esElectro() || ultCosa.precio() > 50000
+    },
+    esDerrochona(){
+        const total = this.cosas.reduce(
+            (acum, cosa)=> acum + cosa.precio()
+            , 0
+        )
+        return total >= 90000
+    },
+    compraMasCara() {
+        return this.cosas.reduce(
+            (c1, c2) => c1.precio() > c1.precio() ? c1 : c2
+        )
+    },
+    electrodomÃ©sticosComprados() {
+        return this.cosas.filter(cosa => cosa.esElectro())
+    },
+    malaEpoca() {
+        return this.cosas.every(cosa => cosa.esComida())
+    },
+    faltaComida() {
+        return this.cosas.filter(
+            cosa => cosa.esComida()
+        ).length < 2
+    }
+}
+
+
+//Prueba la casa compra asado, cama y plancha
+casa.comprar(asado)  
+casa.comprar(cama)
+casa.comprar(plancha)
+
+// test cantidadDeCosasCompradas = 3
+console.log('------------------------')
+console.log('cantidadDeCosasCompradas')
+console.log(casa.cantidadDeCosasCompradas())
+console.log('------------------------')
+console.log('')
+
+// test tieneComida = True
+console.log('------------------------')
+console.log('tieneComida')
+console.log(casa.tieneComida())
+console.log('------------------------')
+console.log('')
+
+
+// test vieneDeEquiparse = True
+console.log('------------------------')
+console.log('vieneDeEquiparse')
+console.log(casa.vieneDeEquiparse())
+console.log('------------------------')
+console.log('')
+
+
+// test esDerrochona = false
+console.log('------------------------')
+console.log('esDerrochona')
+console.log(casa.esDerrochona())
+console.log('------------------------')
+console.log('')
+
+
+// test compraMasCara = cama
+console.log('------------------------')
+console.log('compraMasCara')
+console.log(casa.compraMasCara())
+console.log('------------------------')
+console.log('')
+
+// test electrodomÃ©sticosComprados = [cama]
+console.log('------------------------')
+console.log('electrodomÃ©sticosComprados')
+console.log(casa.electrodomÃ©sticosComprados())
+console.log('------------------------')
+console.log('')
+
+// test malaEpoca = false
+console.log('------------------------')
+console.log('malaEpoca')
+console.log(casa.malaEpoca())
+console.log('------------------------')
+console.log('')
+
+// test faltaComida = true
+console.log('------------------------')
+console.log('faltaComida')
+console.log(casa.faltaComida())
+console.log('------------------------')
+console.log('')
