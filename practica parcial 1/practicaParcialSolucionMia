@@ -1,0 +1,142 @@
+// Requisitos
+// Dominic tiene diferentes tipos de autos en su almacén y debe poder:
+
+
+
+// Tipos de autos
+// Dominic tiene tres tipos de autos en su almacén:
+
+////////////////
+// 1. Auto Clásico
+// Tiene un estado del motor, que va de 0 a 100.
+// Un auto clásico está en condiciones si el estado del motor es mayor a 65.
+// Puede reparar el motor para restaurar su estado.
+// Su velocidad máxima es 110. Sin embargo, si el estado del motor está entre 50 y 75, puede recibir un aumento de 15 en su velocidad, alcanzando un máximo de 125.
+// Al acelerar, el estado del motor disminuye al 30% de su valor actual.
+// El color inicial es rojo.
+// El estado del motor arranca en 87
+
+let autoClasico = {
+  estadoMotor : 87,
+  velocidadMaxima(){
+    if (this.estadoMotor > 50 || this.estadoMotor < 75) return 125
+    return 110
+  },
+  acelerar(){
+    this.estadoMotor = this.estadoMotor * 0.70
+  },
+  enCondicion(){
+    return this.estadoMotor > 65
+  },
+  repararMotor(){
+    this.estadoMotor = 100
+  },
+  color(){
+    return "rojo"
+  }
+}
+
+// 2. Auto de Carrera
+// Tiene un nivel de gasolina, que va de 0 a 100, y puede tener nitro.
+// Está en condiciones si tiene más del 85% de gasolina y el nitro cargado.
+// Puede llenar el tanque de gasolina y cargar nitro para estar listo.
+// Al acelerar, el auto consume gasolina 15 si el nivel de gasolina es par, sino 10.
+// Su velocidad máxima es 200, pero si tiene nitro cargado, puede llegar hasta 285.
+// El color inicial es verde.
+// El nivel de gasolina arranca en 100 y sin nitro.
+let autoCarrera = {
+  gasolina : 100,
+  nitro: false,
+  velocidadMaxima(){
+    if (this.nitro) return 285
+    return 200
+  },
+  acelerar(){
+    if (this.gasolina % 2 == 0){
+      this.gasolina -= 15
+    } else {
+      this.gasolina -= 10
+    }
+    
+    if (this.nitro) this.nitro = false
+  },
+  enCondicion(){
+    let gasolina85 = 100 * 0.85 // rarooooo
+    return this.gasolina > gasolina85 && this.nitro
+  },
+  cargarGasolina(){
+    this.gasolina = 100
+  },
+  cargarNitro(){
+    if (!this.nitro){
+      this.nitro = true
+    }
+  },
+  color(){
+    return "verde"
+  }
+}
+
+// 3. Auto de Colección
+// Está en condiciones o no, puede variar.
+// Acelerar lo deja fuera de condiciones.
+// Tiene una velocidad máxima fija de 45, siendo más lento que los otros autos.
+// El color simepre es rojo.
+
+// Colores
+// En el modelo tenemos 4 colores
+
+// rojo
+// azul
+// verde
+// negro
+// Cuando un vehiculo se pone en condiciones, cambia su color. Es decir si el vehiculo es de color:
+
+// rojo cambia azul
+// azul cambia verde
+// verde cambia negro.
+// negro no cambia se queda siempre en negro
+/////////////////////////////////////////////////////////////
+// Agregar y quitar autos del almacén.
+// Identificar los autos que no están en condiciones para correr.
+// Poner en condiciones los autos que no están listos.
+// Encontrar el auto más rápido en su colección.
+// Calcular el promedio de velocidades máximas de todos los autos en el almacén.
+// Acelerar todos los autos, lo que podría afectar su estado o disponibilidad para la próxima carrera.
+// Verificar si todos los autos están en condiciones para la carrera.
+
+// Vender todos los vehículos al final de la temporada (vaciar el almacén). No se puede utilizar clear()
+
+// Colores de los vehiculos Toretto quiere saber los colores de sus autos, pero cuidado si hay 2 autos del mismo color, este color no debe estar duplicado.
+
+
+const almacen = {
+  garaje : [],
+  agregarAuto(auto){
+    this.garaje.push(auto)
+  },
+  quitarAuto(auto){
+    let idx = this.garaje.findIndex(a => a == auto)
+    if (idx != -1) this.garaje.splice(idx,1)
+  },
+  autoMasRapido(){
+    return this.garaje.reduce((a,b) => a.velocidadMaxima() > b.velocidadMaxima() ? a : b)
+  },
+  autoPromedio(){
+    return this.garaje.reduce((acum,auto)=> acum + auto.velocidadMaxima(),0) / this.garaje.length
+  },
+  acelerarAutos(){
+    this.garaje.forEach(a => a.acelerar())
+  },
+  todosEnCondiciones(){
+    return this.garaje.every(a => a.enCondicion())
+  },
+  venderAutos(){
+    this.garaje = []
+  },
+}
+
+// almacen.agregarAuto(autoCarrera)
+// almacen.autoMasRapido()
+// almacen.autoPromedio()
+// almacen.todosEnCondiciones()
