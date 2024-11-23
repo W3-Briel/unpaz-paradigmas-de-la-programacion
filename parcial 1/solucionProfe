@@ -1,0 +1,111 @@
+const moto = {
+    peso() { return 500 },
+    peligrosidad() { return 10 }
+}
+
+const transformer = {
+    robot: true,
+    peso() { return 800 },
+    peligrosidad() { return this.robot ? 30 : 15 },  //expresion ternaria
+    transfomar() { this.robot = !this.robot }  //alterna
+}
+
+const ladrillos = {
+    cantidad: 10,
+    peso() { return this.cantidad * 2 },
+    peligrosidad() { return 2 },
+    agregar(unaCantidad) { this.cantidad += unaCantidad },
+    quitar(unaCantidad) {
+        this.cantidad = Math.max(0, this.cantidad - unaCantidad)
+    }
+}
+
+const bateriaAntiaerea = {
+    conMisiles: false,
+    peso() { return this.conMisiles ? 300 : 200 },
+    peligrosidad() { return this.conMisiles ? 100 : 0 },  //expresion ternaria
+    cargarMisiles() { this.conMisiles = true },
+    descargarMisiles() { this.conMisiles = false }
+
+}
+
+residuosRadiactivos = {
+    pesoVariable: 30,
+    peso() { return this.pesoVariable },
+    cambiarPeso(unValor) { this.pesoVariable = Math.max(0, unValor) },
+    peligrosidad() { return 200 }
+}
+
+embalajeSeguridad = {
+    cosaQueEnvuelve : residuosRadiactivos,   //igual que el ejercicio de golosina baÃ±ada
+    envolver(unaCosa){ this.cosaQueEnvuelve = unaCosa }, 
+    peso(){ return this.cosaQueEnvuelve.peso() },
+    peligrosidad() { return this.cosaQueEnvuelve.peligrosidad() / 2}
+    
+} 
+
+
+//aplicar el reducer de las 2 formas que viemos en clase
+contenedor = {
+    cosas: [],
+    agregar(unaCosa) { this.cosas.push(unaCosa) },
+    peso() { return 100 + this.cosas.reduce( (acum, cosa)=> acum + cosa.peso() , 0) },
+    peligrosidad() { 
+        return  this.cosas.reduce( 
+            (cosa1, cosa2)=> cosa1.peligrosidad() > cosa2.peligrosidad() ? cosa1 : cosa2 
+        ).peligrosidad()
+    }
+}
+
+// Test del contenedor portuario cargando todas las cosas y la bateriaAntieareaCargada
+//------------------------------------------------------------------------------------
+bateriaAntiaerea.cargarMisiles()
+contenedor.agregar(moto)
+contenedor.agregar(transformer)
+contenedor.agregar(ladrillos)
+contenedor.agregar(bateriaAntiaerea)
+contenedor.agregar(residuosRadiactivos)
+contenedor.agregar(embalajeSeguridad)
+console.log(`El peso del contendor es ${contenedor.peso()}`)
+console.log(`El nivel de peligrosidad es ${contenedor.peligrosidad()}`)
+// Fin tes del contenedor.
+
+
+camion = {
+    cosas: [],
+    agregar(unaCosa){ this.cosas.push(unaCosa)},
+    quitar(unaCosa) {
+        const idx = this.cosas.findIndex(coss=> cosa==unaCosa)
+        if( idx > 0) 
+            this.cosas.splice(idx, 1)
+    },
+    pesoTotalCamion() { return this.cosas.reduce((acum, cosa)=> acum + cosa.peso() ,0 )},
+    todasCosasDePesoImpar() { return this.cosas.every( cosa => cosa.peso() % 2 == 1)},
+    algunaCosaPesa(unValor) { return this.cosas.some( cosa => cosa.peso() == unValor)},
+    primeraCosaDePeligrosidad(unValor) { return this.cosas.find( cosa => cosa.peligrosidad() == unValor)},
+    cosasQueSuperaPeligrosidad(unVAlor) { return this.cosas.filter( cosa => cosa.peligrosidad() > unVAlor)},
+    cosasQueSuperaLaPeligrosidadDe(unaCosa) { return this.cosasQueSuperaPeligrosidad(unaCosa.peligrosidad())},
+    estaExecidoDePeso() { return this.pesoTotalCamion() > 2500 },
+    puedeCircularEnRuta(unValorPeligroso) { 
+        return !this.estaExecidoDePeso() && this.cosasQueSuperaPeligrosidad(unValorPeligroso).length==0 }
+}
+
+// Preparacion del CamiÃ³n
+camion.agregar(transformer)
+bateriaAntiaerea.cargarMisiles()
+camion.agregar(bateriaAntiaerea)
+ladrillos.agregar(70)  // tiene 10 y le agrego 70 para llegar a 80
+embalajeSeguridad.envolver(ladrillos)
+camion.agregar(ladrillos)
+// verfificaciones
+console.log('\nTest del camion-----------------')
+console.log(`Peso total del camion: ${camion.pesoTotalCamion()}`)  // 1260
+console.log(`Todas las cosas son de Peso Imprar: ${camion.todasCosasDePesoImpar()}`) //false
+console.log(`Alguna cosa pesa: ${camion.algunaCosaPesa(80)}`)  // False
+console.log(`Alguna cosa pesa: ${camion.algunaCosaPesa(160)}`) // si los ladrillos
+console.log(`Primera cosa de peligrosiad: ${camion.primeraCosaDePeligrosidad(500)}`)  //undefined
+console.log(`Primera cosa de peligrosiad: ${camion.primeraCosaDePeligrosidad(100)}`)  //la bateria antiaerea porque tiene los misiles
+console.log(`Cosas que superan un nivel de peligrosidad ${camion.cosasQueSuperaPeligrosidad(20)}`) // Transformer, bateriaAntiearea
+console.log(`Esta exedido de peso: ${camion.estaExecidoDePeso()}`)  // false 1260 > 2500
+console.log(`Puede circular en rutna: ${camion.puedeCircularEnRuta(500)}`)  // true no esta excedido de peso y la cosa mas peligrosa es de 100
+console.log(`Puede circular en rutna: ${camion.puedeCircularEnRuta(99)}`)  // false no esta excedido de peso y la cosa mas peligrosa es de 99
