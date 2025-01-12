@@ -57,12 +57,6 @@ Este recurso puede ser especialmente útil si estás pensando en rendir la mater
 
 ---
 
-## **Contacto**
-
-Si tienes preguntas, sugerencias o encuentras útil este repositorio, no dudes en contactarme:
-- **Correo**: saucedog926@gmail.com
-- **GitHub**: [@W3-Briel](https://github.com/W3-Briel)
-
 ## **Keywords**
 
 - Paradigmas de la Programación UNPAZ.
